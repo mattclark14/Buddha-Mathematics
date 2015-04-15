@@ -10,7 +10,7 @@ public class Player {
     this.x = x;
     this.y = y;
     speed = 1;
-    gun = new Weapon();
+    gun = new Weapon(this);
     angle = 0;
     health = 10;
   }
@@ -22,6 +22,8 @@ public class Player {
       turn(-1);
     if(e.getKeyCode() == KeyEvent.VK_UP)
       move();
+    if(e.getKeyCode() == KeyEvent.VK_E)
+      shoot();
   }
   
   public int getAngle(){
@@ -29,7 +31,7 @@ public class Player {
   }
   
   public void shoot() {
-    
+    gun.fire();
   }
   
   public void move() {
@@ -37,8 +39,12 @@ public class Player {
     x += 4 * Math.cos(Math.toRadians(angle));
   }
   
-  public void changeHealth() {
-    
+  public boolean changeHealth(boolean down) {
+    health += down ? -1 : 1;
+    if(health <= 0)
+      return true;
+    else
+      return false;
   }
   
   public void changeWeapon() {
