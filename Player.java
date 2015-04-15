@@ -1,54 +1,46 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Player {
-  private int x, y, health;
-  private double angle, speed;
-  private Weapon gun;
+public class FrameTest extends JPanel{
   
-  public Player(int x, int y) {
-    this.x = x;
-    this.y = y;
-    speed = 1;
-    gun = new Weapon();
-    angle = 0.0;
-  }
+  private Player p1;
   
-  public void keyPressed(KeyEvent e) {
-    if(e.getKeyCode() == KeyEvent.VK_RIGHT)
-      turn();
-    if(e.getKeyCode() == KeyEvent.VK_UP)
-      move();
-  }
-  
-  public void shoot() {
+  public static void main(String[] args) throws InterruptedException{
+    JFrame frame = new JFrame("Test");
+    FrameTest ft = new FrameTest();
     
-  }
-  
-  public void move() {
-    y += 2 * Math.sin(Math.toRadians(angle));
-    x += 2 * Math.cos(Math.toRadians(angle));
-  }
-  
-  public void changeHealth() {
+    frame.add(ft);
+    frame.setSize(700,700);
+    frame.setVisible(true);
     
+    while(true) {
+      ft.repaint();
+      Thread.sleep(5);
+    }
   }
   
-  public void changeWeapon() {
+  public FrameTest() {
+    KeyListener listen = new KeyListener() {
+      @Override
+      public void keyReleased(KeyEvent e) {}
+      @Override
+      public void keyTyped(KeyEvent e) {}
+      @Override
+      public void keyPressed(KeyEvent e) {
+        p1.keyPressed(e);
+      }
+    };
     
-  }
-  
-  public void turn() {
-    angle += 10;
+    addKeyListener(listen);
+    setFocusable(true);
+    
+    p1 = new Player(250,250);
   }
   
   public void paint(Graphics g) {
-    Graphics2D g2d = (Graphics2D) g;
-    g2d.setColor(Color.black);
+    super.paint(g);
     
-    g2d.rotate(Math.toRadians(angle), x + 10, y + 10);
-    g2d.fillOval(x,y,20,20);
-    
-    g2d.rotate(Math.toRadians(-angle), x + 10, y + 10);
+    p1.paint(g);
   }
 }
