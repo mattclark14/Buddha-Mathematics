@@ -16,7 +16,9 @@ public class Player {
   
   public void keyPressed(KeyEvent e) {
     if(e.getKeyCode() == KeyEvent.VK_RIGHT)
-      turn();
+      turn(1);
+    if(e.getKeyCode() == KeyEvent.VK_LEFT)
+      turn(-1);
     if(e.getKeyCode() == KeyEvent.VK_UP)
       move();
   }
@@ -26,8 +28,8 @@ public class Player {
   }
   
   public void move() {
-    y += 4 * Math.sin(Math.toRadians(angle));
-    x += 4 * Math.cos(Math.toRadians(angle));
+    y += 2 * Math.sin(Math.toRadians(angle));
+    x += 2 * Math.cos(Math.toRadians(angle));
   }
   
   public void changeHealth() {
@@ -38,13 +40,13 @@ public class Player {
     
   }
   
-  public void turn() {
-    angle += 10;
+  public void turn(int d) {
+    angle += d == 1 ? 15 : -15;
   }
   
   public void paint(Graphics g) {
     Graphics2D g2d = (Graphics2D) g;
-    g2d.setColor(Color.black);
+    g2d.setColor(Color.darkGray);
     
     g2d.rotate(Math.toRadians(angle), x + 10, y + 10);
     g2d.fillOval(x,y,20,20);
