@@ -2,8 +2,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Player {
-  private int x, y, health;
-  private double angle, speed;
+  private int x, y, health, angle;
+  private double speed;
   private Weapon gun;
   
   public Player(int x, int y) {
@@ -11,7 +11,8 @@ public class Player {
     this.y = y;
     speed = 1;
     gun = new Weapon();
-    angle = 0.0;
+    angle = 0;
+    health = 10;
   }
   
   public void keyPressed(KeyEvent e) {
@@ -23,13 +24,17 @@ public class Player {
       move();
   }
   
+  public int getAngle(){
+    return angle;
+  }
+  
   public void shoot() {
     
   }
   
   public void move() {
-    y += 2 * Math.sin(Math.toRadians(angle));
-    x += 2 * Math.cos(Math.toRadians(angle));
+    y += 4 * Math.sin(Math.toRadians(angle));
+    x += 4 * Math.cos(Math.toRadians(angle));
   }
   
   public void changeHealth() {
@@ -50,8 +55,9 @@ public class Player {
     
     g2d.rotate(Math.toRadians(angle), x + 10, y + 10);
     g2d.fillOval(x,y,20,20);
-    g2d.fillRect(x+5,y+5,20,10);
-    
+    g2d.fillRect(x+5,y+5,20,10);    
     g2d.rotate(Math.toRadians(-angle), x + 10, y + 10);
+    g2d.setColor(Color.green);
+    g2d.fillArc(x,y,20,20,0,36*health);
   }
 }
