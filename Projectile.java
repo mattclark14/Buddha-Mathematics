@@ -9,19 +9,17 @@ public class Projectile
 {
   private int damage;
   private int x;
-  private int xv;
   private int y;
-  private int yv;
+  private int angle;
   private Weapon weapon;
   
-  public Projectile(int damage, int x, int xv, int y, int yv)
+  public Projectile(int damage, int x, int y, int angle)
   {
     this.damage = damage;
     this.x = x;
-    this.xv = xv;
     this.y = y;
-    this.yv = yv;
     this.weapon = weapon;
+    this.angle = angle;
   }
   
   public void collision()
@@ -36,15 +34,13 @@ public class Projectile
   
   public void move()
   {
-    xv = (int)(2 * Math.sin(Math.toRadians(getAngle())));
-    yv = (int)(2 * Math.cos(Math.toRadians(getAngle())));
-    
-    x = x + xv;
-    y = y + yv;
+    x += 2 * (int) Math.sin(Math.toRadians(angle));
+    y += 2 * (int) Math.cos(Math.toRadians(angle));
   }
   
   public void paint(Graphics2D g)
   {
-    g.fillOval(x, y, 20, 20);
+    g.setColor(Color.yellow);
+    g.fillRect(x, y, 20, 40);
   }
 }
