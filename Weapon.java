@@ -1,33 +1,34 @@
+import java.util.*;
+
 public class Weapon
 {
-  private int fireRate, ammo, ammoLeft, reload;
+  private int fireRate, ammo, reload, damage;
   private boolean canFire = true;
-  Projectile[] b = new Projectile[ammo];
-  Player p = new Player();
+  private Player p;
+  
+  List<Projectile> mylist = new ArrayList<Projectile>();
     
-  public Weapon(Player p, Projectile[] b, int fireRate, int ammo, int reload)
+  public Weapon(Player p, int type)
   {
     this.p = p;
-    this.b = b;
-    this.fireRate = fireRate;
-    this.ammo = ammo;
+    
+    damage = 2;
+    fireRate = 200;
+    reload = 1000;
+    ammo = -1;
   }
   
   public void fire()
   {
-    b[ammo - ammoLeft].move();
-    ammoLeft--;
+    
   }
   
   public void reload()
   {
-    canFire = false;
-    ammoLeft = ammo;
-    canFire = true;
+    
   }
   public int getAngle()
   {
     return p.getAngle(); 
   }
-  
 }
