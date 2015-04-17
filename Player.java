@@ -5,12 +5,13 @@ public class Player {
   private int x, y, health, angle;
   private double speed;
   private Weapon gun;
+  private Player p1;
+  private Map m;
   
   public Player(int x, int y) {
     this.x = x;
     this.y = y;
     speed = 1;
-    gun = new Weapon(this);
     angle = 0;
     health = 10;
   }
@@ -35,9 +36,23 @@ public class Player {
   }
   
   public void move() {
-    y += 4 * Math.sin(Math.toRadians(angle));
-    x += 4 * Math.cos(Math.toRadians(angle));
+    if(m.getPosition((int)(x + 4 * Math.sin(Math.toRadians(angle))), (int)(y + 4 * Math.cos(Math.toRadians(angle)))) != 1)
+    {
+      y += 4 * Math.sin(Math.toRadians(angle));
+      x += 4 * Math.cos(Math.toRadians(angle));
+    }
   }
+  
+  public int getX()
+  {
+   return x;
+  }
+  
+  public int getY()
+  {
+   return y; 
+  }
+  
   
   public boolean changeHealth(boolean down) {
     health += down ? -1 : 1;
