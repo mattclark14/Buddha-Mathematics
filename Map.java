@@ -37,7 +37,7 @@ public class Map extends JPanel
   };
   boolean obstacle[][] = new boolean[25][25];
   
-  Player p1 = new Player(100,100);
+  Player p1 = new Player(100,100, map);
   
   public Map() {
     KeyListener listen = new KeyListener() {
