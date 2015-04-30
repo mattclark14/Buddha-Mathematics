@@ -39,11 +39,12 @@ public class Player {
   public void move() {
     y += 4 * Math.sin(Math.toRadians(angle));
     x += 4 * Math.cos(Math.toRadians(angle));
-    if(map[x / 25][y / 25] == 1)
+    if(map[y / 28][x / 28] == 1 || map[(y + 26) / 28][(x + 26) / 28] == 1)
     {
-      y = 0;
-      x = 0;
+      y -= 4 * Math.sin(Math.toRadians(angle));
+      x -= 4 * Math.cos(Math.toRadians(angle));
     }
+    System.out.println(map[y / 28][x / 28]); //delete later
   }
   
   public boolean changeHealth(boolean down) {
