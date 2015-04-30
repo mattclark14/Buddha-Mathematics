@@ -37,7 +37,8 @@ public class Map extends JPanel
   };
   boolean obstacle[][] = new boolean[25][25];
   
-  Player p1 = new Player(100,100, map);
+  Player p1 = new Player(100, 100, map);
+  Player p2 = new Player(600, 600, map);
   
   public Map() {
     KeyListener listen = new KeyListener() {
@@ -48,6 +49,7 @@ public class Map extends JPanel
       @Override
       public void keyPressed(KeyEvent e) {
         p1.keyPressed(e);
+        p2.keyPressed(e);
       }
     };
     addKeyListener(listen);
@@ -98,9 +100,10 @@ public class Map extends JPanel
           paint = Color.orange; //Obvious color to show errors
         
         g2d.setColor(paint);
-        g2d.fillRect(i * 28, j * 28, 27, 27);
+        g2d.fillRect(i * 28, j * 28, 28, 28);
       }
     }
     p1.paint(g2d);
+    p2.paint(g2d);
   }
 }
