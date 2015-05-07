@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.Timer;
+import java.util.*;
 import java.awt.* ; 
 import java.awt.event.*; 
 import javax.imageio.*;
@@ -7,6 +9,8 @@ import java.awt.image.*;
 
 public class Map extends JPanel
 {
+  JLabel output = new JLabel();
+  private Keyer keyer = new Keyer(this);
   // view of the map
   int[][] map = new int[][] {
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -37,22 +41,14 @@ public class Map extends JPanel
   };
   boolean obstacle[][] = new boolean[25][25];
   
-  Player p1 = new Player(100, 100, map);
-  Player p2 = new Player(600, 600, map);
+  Player p1 = new Player(100, 100, map, true);
+  Player p2 = new Player(600, 600, map, false);
   
   public Map() {
-    KeyListener listen = new KeyListener() {
-      @Override
-      public void keyReleased(KeyEvent e) {}
-      @Override
-      public void keyTyped(KeyEvent e) {}
-      @Override
-      public void keyPressed(KeyEvent e) {
-        p1.keyPressed(e);
-        p2.keyPressed(e);
-      }
-    };
-    addKeyListener(listen);
+    Timer timer = new Timer(1000/60, keyer);
+    timer.start();
+    addKeyListener(keyer);
+    add(output, BorderLayout.CENTER);
     setFocusable(true);
   }
   
@@ -70,7 +66,8 @@ public class Map extends JPanel
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
     frame.setResizable(false);
     
-    while(true) {
+    while(true) 
+    {
       m.repaint();
       Thread.sleep(10);
     }
