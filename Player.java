@@ -1,13 +1,18 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.Timer;
 
 public class Player {
-  private int x, y, health, angle;
+  private int health, angle;
+  private double x, y;
   private double speed;
   private Weapon gun;
   private int[][] map;
+  private boolean first = true;
   
-  public Player(int x, int y, int[][] map) {
+  public Player(int x, int y, int[][] map, boolean first) {
     this.x = x;
     this.y = y;
     speed = 1;
@@ -15,19 +20,10 @@ public class Player {
     angle = 0;
     health = 10;
     this.map = map;
+    this.first = first;
   }
   
-  public void keyPressed(KeyEvent e) {
-    if(e.getKeyCode() == KeyEvent.VK_RIGHT)
-      turn(1);
-    if(e.getKeyCode() == KeyEvent.VK_LEFT)
-      turn(-1);
-    if(e.getKeyCode() == KeyEvent.VK_UP)
-      move();
-    if(e.getKeyCode() == KeyEvent.VK_E)
-      shoot();
-  }
-  
+
   public int getAngle(){
     return angle;
   }
@@ -36,15 +32,15 @@ public class Player {
     gun.fire();
   }
   
-  public void move() {
-    y += 4 * Math.sin(Math.toRadians(angle));
-    x += 4 * Math.cos(Math.toRadians(angle));
-    if(map[y / 28][x / 28] == 1 || map[(y + 26) / 28][(x + 26) / 28] == 1)
+  public void move(int vel) 
+  { 
+    y += Math.sin(Math.toRadians(angle));
+    x += Math.cos(Math.toRadians(angle));
+    if(map[(int)(y / 28)][(int)(x / 28)] == 1 || map[(int)(y + 26) / 28][(int)(x + 26) / 28] == 1)
     {
-      y -= 4 * Math.sin(Math.toRadians(angle));
-      x -= 4 * Math.cos(Math.toRadians(angle));
+      y -= vel * Math.sin(Math.toRadians(angle));
+      x -= vel * Math.cos(Math.toRadians(angle));
     }
-    System.out.println(map[y / 28][x / 28]); //delete later
   }
   
   public boolean changeHealth(boolean down) {
@@ -55,12 +51,15 @@ public class Player {
       return false;
   }
   
-  public void changeWeapon() {
+  public void changeWeapon() 
+  {
     
   }
   
-  public void turn(int d) {
-    angle += d == 1 ? 15 : -15;
+  public void turn(int d)  //, HashSet pressedKeys) 
+  {
+    //if(pressedKeys.contains(37) || pressedKeys.contains(39))
+      angle += d == 1 ? 3 : -3;   
   }
   
   public void paint(Graphics g) {
@@ -68,10 +67,11 @@ public class Player {
     g2d.setColor(Color.darkGray);
     
     g2d.rotate(Math.toRadians(angle), x + 10, y + 10);
-    g2d.fillOval(x,y,20,20);
-    g2d.fillRect(x+5,y+5,20,10);    
+    g2d.fillOval((int)x,(int)y,20,20);
+    g2d.fillRect((int)x+5,(int)y+5,20,10);    
     g2d.rotate(Math.toRadians(-angle), x + 10, y + 10);
     g2d.setColor(Color.green);
-    g2d.fillArc(x,y,20,20,0,36*health);
+    g2d.fillArc((int)x,(int)y,20,20,0,36*health);
   }
 }
+
