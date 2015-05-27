@@ -42,8 +42,12 @@ public class Keyer implements KeyListener, ActionListener
     int keyCode = e.getKeyCode();
     pressedKeys.add(keyCode);
     System.out.println(pressedKeys);
-    //m.p1.keyPressed(e, pressedKeys);
-    //m.p2.keyPressed(e, pressedKeys);
+    if(pressedKeys.contains(74))
+    {
+      m.p1.shoot();
+    }
+    if(pressedKeys.contains(77))
+      m.p2.shoot();
     
   }
   @Override
@@ -52,8 +56,6 @@ public class Keyer implements KeyListener, ActionListener
     //Remove key from hashset when released
     int keyCode = e.getKeyCode();
     pressedKeys.remove(keyCode);
-    //m.p1.keyReleased(e);
-    //m.p2.keyReleased(e);
   }
   @Override
   public void keyTyped(KeyEvent e){}
@@ -73,6 +75,8 @@ public class Keyer implements KeyListener, ActionListener
     if(pressedKeys.contains(87))
       m.p2.move(1);
     
+    m.p1.gun.move();
+    m.p2.gun.move();
   }
 }
   
