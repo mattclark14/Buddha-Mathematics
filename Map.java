@@ -13,15 +13,19 @@ public class Map extends JPanel implements ActionListener
 {
   JLabel output = new JLabel();
   private Keyer keyer = new Keyer(this);
-  Timer spawn = new Timer(10000, this);
+  Queue myQueue = new Queue();
+  Timer spawn = new Timer(2000, this);
   private BufferedImage grass, wall, weapon, water, bridge;
   private boolean start = false;
   private Mouser mouser = new Mouser(start);
   private int xSpawn;
   private int ySpawn;
+  private int p1Score, p2Score;
+  private int mapType = 1;
   public int spawnCount;
   private String background = "C:/Users/Hunter/Desktop/cstp/bound2.mp3";
   private int type;
+  
   // view of the map
   int[][] map = new int[][] {
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -57,7 +61,7 @@ public class Map extends JPanel implements ActionListener
   
   public Map() 
   { 
-    Timer timer = new Timer(1000/60, keyer);
+    Timer timer = new Timer(1000/120, keyer);
     timer.start();
     spawn.start();
     addKeyListener(keyer);
@@ -70,6 +74,8 @@ public class Map extends JPanel implements ActionListener
   
   public void actionPerformed(ActionEvent a)
   {
+    p1Score = p2.getDeaths();
+    p2Score = p1.getDeaths();
     if(start == true)
     {
       xSpawn = (int)(Math.random() * 25);
@@ -83,21 +89,16 @@ public class Map extends JPanel implements ActionListener
       
       map[xSpawn][ySpawn] = 4;
       spawnCount++;
-      if(spawnCount > 5)
-      {
-        for(int i = 0; i < 25; i++)
-        {
-          for(int j = 0; j < 25; j++)
-          {
-            if(map[j][i] == 4)
-            {
-              //map[j][i] = 0;
-              spawnCount--;
-              break;
-            }
-          }
-        }
-      }
+      myQueue.insertNext(xSpawn, ySpawn);
+      System.out.println(myQueue.rear.info);
+      System.out.println(myQueue.rear.info2);
+    }
+    
+    if(spawnCount >= 6)
+    {
+      myQueue.delete();
+      map[myQueue.front.info][myQueue.front.info2] = 0;
+      spawnCount--;
     }
   }
   
@@ -110,7 +111,7 @@ public class Map extends JPanel implements ActionListener
     frame.add(m);
     
     //Window settings
-    frame.setSize(700, 725);
+    frame.setSize(870, 725);
     frame.setVisible(true);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
     frame.setResizable(false);
@@ -127,16 +128,40 @@ public class Map extends JPanel implements ActionListener
   {
     if(start == true)
     {
-      if((p1.gun.x + 6 >= p2.x && p1.gun.x <= (p2.x + 28)))
+      if((p1.gun.x + 6 >= p2.x && p1.gun.x <= (p2.x + 28)) && (p1.gun.type < 4 || p1.gun.type == 5))
       {
         if(p1.gun.y + 6 >= p2.y && p1.gun.y <= (p2.y + 28))
         {
           p2.hit(p1.gun.getDamage());
         }
       }
-      if((p2.gun.x + 6 >= p1.x && p2.gun.x <= p1.x + 28) && (p2.gun.y + 6 >= p1.y && p2.gun.y <= p1.y + 28))
+      else if((p1.gun.type == 4 || p1.gun.type == 7) && p1.gun.x + 18 >= p2.x && p1.gun.x <= (p2.x + 28))
       {
-        p1.hit(p2.gun.getDamage());
+        if(p1.gun.y + 18 >= p2.y && p1.gun.y <= (p2.y + 28))
+        {
+          p2.hit(p1.gun.getDamage());
+        }
+      }
+      else if(p1.gun.type == 8 && p1.gun.getAngle() + 30 >=  p2.x && p1.gun.getAngle() <= (p2.x + 58))
+      {
+        if(p1.gun.getAngle() + 30 >=  p2.y && p1.gun.getAngle() <= (p2.y + 58))
+        {
+          p2.hit(p1.gun.getDamage());
+        }
+      }
+      if((p2.gun.x + 6 >= p1.x && p2.gun.x <= p1.x + 28) && (p2.gun.type < 4 || p2.gun.type == 5))
+      {
+        if((p2.gun.y + 6 >= p1.y && p2.gun.y <= p1.y + 28))
+        {
+          p1.hit(p2.gun.getDamage());
+        }
+      }
+      else if((p2.gun.type == 4 || p2.gun.type == 7) && p2.gun.x + 18 >= p1.x && p2.gun.x <= (p1.x + 28))
+      {
+        if(p2.gun.y + 18 >= p1.y && p2.gun.y <= (p1.y + 28))
+        {
+          p1.hit(p2.gun.getDamage());
+        }
       }
     }
   }
@@ -145,27 +170,27 @@ public class Map extends JPanel implements ActionListener
   {
     try
     {
-      grass = ImageIO.read(new File("C:/Users/Hunter/Desktop/cstp/grass.jpg"));
+      grass = ImageIO.read(new File("U:/Profile/Desktop/ISU/grass.jpg"));
     }catch(IOException e) {
     }
     try
     {
-      wall = ImageIO.read(new File("C:/Users/Hunter/Desktop/cstp/wall.jpg"));
+      wall = ImageIO.read(new File("U:/Profile/Desktop/ISU/wall.jpg"));
     }catch(IOException e) {
     }
     try
     {
-      weapon = ImageIO.read(new File("C:/Users/Hunter/Desktop/cstp/weapon.jpg"));
+      weapon = ImageIO.read(new File("U:/Profile/Desktop/ISU/weapon.jpg"));
     }catch(IOException e) {
     }
     try
     {
-      water = ImageIO.read(new File("C:/Users/Hunter/Desktop/cstp/water.jpg"));
+      water = ImageIO.read(new File("U:/Profile/Desktop/ISU/water.jpg"));
     }catch(IOException e) {
     }
     try
     {
-      bridge = ImageIO.read(new File("C:/Users/Hunter/Desktop/cstp/bridge.jpg"));
+      bridge = ImageIO.read(new File("U:/Profile/Desktop/ISU/bridge.jpg"));
     }catch(IOException e) {
     }
   }
@@ -181,19 +206,23 @@ public class Map extends JPanel implements ActionListener
     if(start == false)
     {
       g2d.setColor(Color.darkGray);
+      g2d.fillRect(700, 0, 150, 800);
       g2d.fillRect(0, 0, 700, 700);
       g2d.setColor(Color.BLACK);
       g2d.fillRect(275, 120, 150, 50);
-      g2d.fillRect(275, 200, 270, 50);
+      g2d.fillRect(230, 200, 270, 50);
       g2d.setColor(Color.RED);
       g2d.setFont(new Font("TimesRoman", Font.PLAIN, 40)); 
       g2d.drawString("COMPUTER SCIENCE GAME", 90, 40);
       g2d.drawString("the game", 280, 80);
       g2d.setFont(new Font("TimesRoman", Font.BOLD, 40)); 
       g2d.drawString("Start", 305, 155);
-      g2d.drawString("Instructions", 305, 235);
+      g2d.drawString("Instructions", 265, 235);
       mouser.paint(g2d);
     }
+    
+    g2d.setColor(Color.darkGray);
+    g2d.fillRect(700, 0, 170, 800);
     
     if(start == true)
     {
@@ -228,6 +257,23 @@ public class Map extends JPanel implements ActionListener
           }
         }
       }
+      g2d.setColor(Color.RED);
+      g2d.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+      g2d.drawString("P1 Score:", 710, 40);
+      g2d.drawString(String.valueOf(p1Score), 720, 80);
+      g2d.drawString("P1 Health:", 710, 120);
+      g2d.drawString(String.valueOf(p1.getHealth()), 720, 160);
+      g2d.drawString("P1 Weapon:", 710, 200);
+      //g2d.drawString(String.valueOf(p1.getHealth()), 720, 240);
+      g2d.setColor(Color.RED);
+      g2d.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+      g2d.drawString("P2 Score:", 710, 380);
+      g2d.drawString(String.valueOf(p2Score), 720, 420);
+      g2d.drawString("P2 Health:", 710, 460);
+      g2d.drawString(String.valueOf(p2.getHealth()), 720, 500);
+      g2d.drawString("P2 Weapon:", 710, 540);
+      //g2d.drawString(String.valueOf(p2.getHealth()), 720, 480);
+    
       p1.paint(g2d);
       p2.paint(g2d);
     }
