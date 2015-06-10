@@ -9,7 +9,7 @@ import java.awt.image.*;
 
 public class Player implements ActionListener
 {
-  private int health, angle, spawnCount;
+  private int health, angle, spawnCount, spawnCorner, deaths;
   public double x, y;
   private double speed;
   private int[][] map;
@@ -26,11 +26,21 @@ public class Player implements ActionListener
     this.map = map;
     this.spawnCount = spawnCount;
     speed = 1;
-    gun = new Weapon(this, 1, map, first);
+    gun = new Weapon(this, 5, map, first);
     angle = 0;
     health = 10;
     this.first = first;
-    iF = new Timer(200, this);
+    iF = new Timer(50, this);
+  }
+  
+  public int getDeaths()
+  {
+    return deaths;
+  }
+  
+  public int getHealth()
+  {
+    return health;
   }
   
   public int getX()
@@ -55,8 +65,8 @@ public class Player implements ActionListener
   
   public void move(int vel) 
   { 
-    y += Math.sin(Math.toRadians(angle));
-    x += Math.cos(Math.toRadians(angle));
+    y += (Math.sin(Math.toRadians(angle)));
+    x += (Math.cos(Math.toRadians(angle)));
     if(map[(int)(y / 28)][(int)(x / 28)] == 1 || map[(int)(y + 26) / 28][(int)(x + 26) / 28] == 1)
     {
       y -= Math.sin(Math.toRadians(angle));
@@ -71,7 +81,7 @@ public class Player implements ActionListener
     if(map[(int)(y + 26) / 28][(int)(x + 26) / 28] == 4)
     {
       map[(int)(y + 26) / 28][(int)(x + 26) / 28] = 0;
-      gun = new Weapon(this, (int)((Math.random() * (6 - 1)) + 1), map, first);
+      gun = new Weapon(this, (int)((Math.random() * (9 - 7)) + 7), map, first);
       spawnCount--;
     }
   }
@@ -86,7 +96,29 @@ public class Player implements ActionListener
     }
     if(health <= 0)
     {
-      
+      deaths++;
+      spawnCorner = (int)((Math.random() * (5 - 1)) + 1);
+      if(spawnCorner == 1)
+      {
+        x = 100;
+        y = 100;
+      }
+      else if(spawnCorner == 2)
+      {
+        x = 600;
+        y = 100;
+      }
+      else if(spawnCorner == 3)
+      {
+        x = 100;
+        y = 600;
+      }
+      else if(spawnCorner == 4)
+      {
+        x = 600;
+        y = 600;
+      }
+      health = 10;
     }
   }
   
@@ -111,7 +143,7 @@ public class Player implements ActionListener
   
   public void turn(int d)
   {
-      angle += d == 1 ? 3 : -3;   
+      angle += d == 1 ? 4 : -4;   
   }
   
   public void paint(Graphics g) {
@@ -122,8 +154,16 @@ public class Player implements ActionListener
     g2d.fillOval((int)x,(int)y,20,20);
     g2d.fillRect((int)x+5,(int)y+5,20,10);    
     g2d.rotate(Math.toRadians(-angle), x + 10, y + 10);
-    g2d.setColor(Color.green);
-    g2d.fillArc((int)x,(int)y,20,20,0,36*health);
+    if(first == true)
+    {
+      g2d.setColor(Color.RED);
+      g2d.fillArc((int)x,(int)y,20,20,0,36*health);
+    }
+    else
+    {
+      g2d.setColor(Color.BLUE);
+      g2d.fillArc((int)x,(int)y,20,20,0,36*health);
+    }
     gun.paint(g2d);
   }
 }
