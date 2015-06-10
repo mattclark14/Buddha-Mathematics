@@ -5,18 +5,22 @@ import javax.imageio.*;
 import java.io.*;
 import java.awt.image.*;
 
-public class Projectile
+public class Projectile implements ActionListener
 {
   private Map m;
-  private int damage;
+  private int damage, decrease;
+  private int sixsize = 40;
+  private int swordSize = 36;
+  private int swing = 1;
   public int x;
   public int y;
   private boolean first;
   private int angle, type;
   private Weapon gun;
   private int map[][];
+  Timer shrink;
   
-  public Projectile(Weapon gun, int[][] map, boolean first, int type)
+  public Projectile(Weapon gun, int[][] map, boolean first, int type) 
   {
     this.gun = gun;
     this.map = map;
@@ -31,6 +35,7 @@ public class Projectile
       angle = gun.getAngle() + (int)(Math.random() * (12 - (-10)) -10);
     }
     damage = gun.getDamage();
+    shrink = new Timer(100, this);
   }
   
   public int getAngle()
@@ -57,6 +62,21 @@ public class Projectile
         x += 16 * Math.cos(Math.toRadians(angle));
         y += 16 * Math.sin(Math.toRadians(angle));
       }
+      else if(type == 6)
+      {
+        x += 2 * Math.cos(Math.toRadians(angle));
+        y += 2 * Math.sin(Math.toRadians(angle));
+      }
+      else if(type == 7)
+      {
+        x += (Math.random() * (20 + 10) - 10) * Math.cos(Math.toRadians(angle));
+        y += (Math.random() * (20 + 10) - 10) * Math.sin(Math.toRadians(angle));
+      }
+      else if(type ==8)
+      {
+        //x = gun.getX();
+        //y = gun.getY();
+      }
     }
     if(map[y / 28][x / 28] == 1)
     {
@@ -77,6 +97,22 @@ public class Projectile
     }
   }
   
+  public void actionPerformed(ActionEvent a)
+  {
+    x = gun.getX();
+    y = gun.getY();
+    swing = swing + 36;
+    sixsize = sixsize - 4;
+    if(sixsize <= 0)
+    {
+      shrink.stop();
+    }
+    else if(swing >= 5)
+    {
+      shrink.stop();
+    }
+  }
+  
   public double getOtherY()
   {
     if(first == true)
@@ -92,9 +128,26 @@ public class Projectile
   public void paint(Graphics2D g)
   {
     g.setColor(Color.yellow);
-    if(type == 4)
+    if(type == 4 || type == 7)
     {
       g.fillOval(x, y, 20, 20);    
+    }
+    else if(type == 6)
+    {
+      g.fillOval(x, y, sixsize, sixsize);
+      shrink.start();
+    }
+    else if(type == 8)
+    {
+      g.fillArc(x - 15, y - 15, 50, 50, (360 - getAngle()) + ((swing -70) * -1), swordSize);
+      if(swing >=180)
+      {
+        swordSize = 0;
+        x = -5;
+        y = -5;
+        swing = 1;
+      }
+      shrink.start();
     }
     else
     {
