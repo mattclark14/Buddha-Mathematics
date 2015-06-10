@@ -43,8 +43,8 @@ public class Weapon implements ActionListener
       damage = 1;
       reload = 4000;
       ammo = -1;
-      shots = 50;
-      shotMax = 50;
+      shots = 150;
+      shotMax = 150;
       fireDelay = 1000;
     }
     else if(type == 3) // shotgun
@@ -65,10 +65,37 @@ public class Weapon implements ActionListener
       shotMax = 2;
       fireDelay = 3000;       
     }
-    else // sniper
+    else if(type == 5) // sniper
     {
-      damage = 8;
+      damage = 10;
       reload = 2000;
+      ammo = -1;
+      shots = 1;
+      shotMax = 1;
+      fireDelay = 2000;
+    }
+    else if(type == 6) // bubble gun
+    {
+      damage = 10;
+      reload = 500;
+      ammo = -1;
+      shots = 1;
+      shotMax = 1;
+      fireDelay = 2000;
+    }
+    else if(type == 7)// cloud gun
+    {
+      damage = 20;
+      reload = 500;
+      ammo = -1;
+      shots = 20;
+      shotMax = 20;
+      fireDelay = 2000;
+    }
+    else // sword
+    {
+      damage = 4;
+      reload = 500;
       ammo = -1;
       shots = 1;
       shotMax = 1;
