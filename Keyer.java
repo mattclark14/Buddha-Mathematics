@@ -42,11 +42,11 @@ public class Keyer implements KeyListener, ActionListener
     int keyCode = e.getKeyCode();
     pressedKeys.add(keyCode);
     System.out.println(pressedKeys);
-    if(pressedKeys.contains(74))
+    if(pressedKeys.contains(96))
     {
       m.p1.shoot();
     }
-    if(pressedKeys.contains(77))
+    if(pressedKeys.contains(74))
       m.p2.shoot();
     
   }
