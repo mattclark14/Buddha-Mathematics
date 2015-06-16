@@ -9,6 +9,11 @@ import java.awt.image.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/*
+ * This class defines the mouse listener that is used in the main menu. It is 
+ * a child of the map class.
+*/
+
 public class Mouser implements ActionListener, MouseListener, MouseMotionListener
 {
   private boolean start, enteredStart, enteredInst, enteredStart2, instructions = false;
@@ -29,6 +34,7 @@ public class Mouser implements ActionListener, MouseListener, MouseMotionListene
   
   }
   
+  // determines if the mouse is clicked on a button
   public void mouseClicked(MouseEvent m) 
   {
     System.out.println(m.getX() + " " + m.getY());
@@ -70,6 +76,7 @@ public class Mouser implements ActionListener, MouseListener, MouseMotionListene
     
   }
   
+  // determines if the mouse cursor has moved within the area of a button
   public void mouseMoved(MouseEvent m) 
   {
     if((m.getX() >= 275 && m.getX() <= 425) && (m.getY() >= 120 && m.getY() <= 170))
@@ -120,11 +127,16 @@ public class Mouser implements ActionListener, MouseListener, MouseMotionListene
     if(instructions == true)
     {
       g.setColor(Color.darkGray);
-      g.fillRect(0, 0, 700, 700);
+      g.fillRect(0, 0, 900, 900);
       g.setColor(Color.yellow);
       g.setFont(new Font("TimesRoman", Font.BOLD, 40)); 
-      g.drawString("shoot the other person to get points and", 0, 50);
-      g.drawString("win", 0, 100);
+      g.drawString("Shoot the other person to get points and win. Player", 0, 50);
+      g.drawString("1 uses 'wasd' keys to move and J to shoot. Player 2", 0, 100);
+      g.drawString("uses the arrow keys to move and 0 on the num pad", 0, 150);
+      g.drawString("to shoot. Collect weapon spawns to get a new weapon.", 0, 200);
+      g.drawString("When your health goes to zero or below, the other", 0, 250);
+      g.drawString("player scores a point.", 0, 300);
+      g.drawString("Have fun!", 300, 400);
       g2d.setColor(Color.BLACK);
       g2d.fillRect(275, 540, 150, 50);
       g.setColor(Color.RED);
