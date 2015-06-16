@@ -1,3 +1,9 @@
+/* Computer science project the game the game
+ * By: Matthew Clark, Brendan Lahey, Hunter Schofield 
+ * 
+ * This class outlines the map and defines the main menu and player 
+ * objects that are controlled throughout the game.
+*/
 import javax.swing.*;
 import javax.swing.Timer;
 import java.util.*;
@@ -11,10 +17,13 @@ import java.awt.event.MouseEvent;
 
 public class Map extends JPanel implements ActionListener
 {
-  JLabel output = new JLabel();
+  public JLabel output = new JLabel();
   private Keyer keyer = new Keyer(this);
-  Queue myQueue = new Queue();
+  public Queue myQueue = new Queue();
+  
+  //weapon spawn timer
   Timer spawn = new Timer(2000, this);
+  
   private BufferedImage grass, wall, weapon, water, bridge;
   private boolean start = false;
   private Mouser mouser = new Mouser(start);
@@ -40,7 +49,7 @@ public class Map extends JPanel implements ActionListener
     { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
     { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
     { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 3, 3, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 3, 3, 2, 2, 3, 3, 0, 0, 1 },
+    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
     { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
     { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
     { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
@@ -54,13 +63,14 @@ public class Map extends JPanel implements ActionListener
     { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
   };
-  boolean obstacle[][] = new boolean[25][25];
   
+  //players
   Player p1 = new Player(100, 100, map, true, spawnCount);
   Player p2 = new Player(600, 600, map, false, spawnCount);
   
   public Map() 
   { 
+    //key listener timer
     Timer timer = new Timer(1000/120, keyer);
     timer.start();
     spawn.start();
@@ -72,8 +82,10 @@ public class Map extends JPanel implements ActionListener
     setImages();
   }
   
+  //spawns and despawns weapons
   public void actionPerformed(ActionEvent a)
   {
+    // tracks the players scores
     p1Score = p2.getDeaths();
     p2Score = p1.getDeaths();
     if(start == true)
@@ -90,8 +102,6 @@ public class Map extends JPanel implements ActionListener
       map[xSpawn][ySpawn] = 4;
       spawnCount++;
       myQueue.insertNext(xSpawn, ySpawn);
-      System.out.println(myQueue.rear.info);
-      System.out.println(myQueue.rear.info2);
     }
     
     if(spawnCount >= 6)
@@ -111,7 +121,7 @@ public class Map extends JPanel implements ActionListener
     frame.add(m);
     
     //Window settings
-    frame.setSize(870, 725);
+    frame.setSize(900, 725);
     frame.setVisible(true);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
     frame.setResizable(false);
@@ -124,6 +134,7 @@ public class Map extends JPanel implements ActionListener
     }
   }
   
+  // detects bullet collisions between players
   public void bulletCollision()
   {
     if(start == true)
@@ -166,6 +177,7 @@ public class Map extends JPanel implements ActionListener
     }
   }
   
+  //sets the buffered images
   public void setImages()
   {
     try
@@ -183,31 +195,21 @@ public class Map extends JPanel implements ActionListener
       weapon = ImageIO.read(new File("U:/Profile/Desktop/ISU/weapon.jpg"));
     }catch(IOException e) {
     }
-    try
-    {
-      water = ImageIO.read(new File("U:/Profile/Desktop/ISU/water.jpg"));
-    }catch(IOException e) {
-    }
-    try
-    {
-      bridge = ImageIO.read(new File("U:/Profile/Desktop/ISU/bridge.jpg"));
-    }catch(IOException e) {
-    }
   }
   
   @Override
   public void paint(Graphics g)
   {
     start = mouser.getStart();
-    //draws map
+    //draws menu
     super.paint(g);
     Graphics2D g2d = (Graphics2D) g;
     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     if(start == false)
     {
       g2d.setColor(Color.darkGray);
-      g2d.fillRect(700, 0, 150, 800);
-      g2d.fillRect(0, 0, 700, 700);
+      g2d.fillRect(700, 0, 300, 900);
+      g2d.fillRect(0, 0, 900, 900);
       g2d.setColor(Color.BLACK);
       g2d.fillRect(275, 120, 150, 50);
       g2d.fillRect(230, 200, 270, 50);
@@ -221,11 +223,13 @@ public class Map extends JPanel implements ActionListener
       mouser.paint(g2d);
     }
     
-    g2d.setColor(Color.darkGray);
-    g2d.fillRect(700, 0, 170, 800);
-    
+    //draws map
     if(start == true)
     {
+      
+      g2d.setColor(Color.darkGray);
+      g2d.fillRect(700, 0, 270, 800);
+    
       for(int i = 0; i < 25; i++)
       {
         for(int j = 0; j < 25; j++)
@@ -240,16 +244,6 @@ public class Map extends JPanel implements ActionListener
             //g2d.setColor(Color.BLACK);
             g2d.drawImage(wall, i* 28, j * 28, 28, 28, null);
           }       
-          else if(map[j][i] == 2)
-          {
-            //g2d.setColor(new Color(165,42,42));
-            g2d.drawImage(bridge, i* 28, j * 28, 28, 28, null);
-          }
-          else if(map[j][i] == 3)
-          {
-            //g2d.setColor(Color.BLUE);
-            g2d.drawImage(water, i* 28, j * 28, 28, 28, null);
-          }
           else
           {
             //g2d.setColor(Color.YELLOW); //Obvious color to show errors
@@ -264,7 +258,7 @@ public class Map extends JPanel implements ActionListener
       g2d.drawString("P1 Health:", 710, 120);
       g2d.drawString(String.valueOf(p1.getHealth()), 720, 160);
       g2d.drawString("P1 Weapon:", 710, 200);
-      //g2d.drawString(String.valueOf(p1.getHealth()), 720, 240);
+      g2d.drawString(p1.getName(), 710, 240);
       g2d.setColor(Color.RED);
       g2d.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
       g2d.drawString("P2 Score:", 710, 380);
@@ -272,7 +266,7 @@ public class Map extends JPanel implements ActionListener
       g2d.drawString("P2 Health:", 710, 460);
       g2d.drawString(String.valueOf(p2.getHealth()), 720, 500);
       g2d.drawString("P2 Weapon:", 710, 540);
-      //g2d.drawString(String.valueOf(p2.getHealth()), 720, 480);
+      g2d.drawString(p2.getName(), 710, 580);
     
       p1.paint(g2d);
       p2.paint(g2d);
