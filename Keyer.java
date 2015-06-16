@@ -6,33 +6,20 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.Timer;
 
+/* 
+ * This class maps the buttons that the players use to control their characters
+ * and allows the compiler to process multiple inputs at once. It is a child of
+ * the map class.
+*/
+
 public class Keyer implements KeyListener, ActionListener
 {
   private Map m;
-  //private JLabel output = new JLabel();
-  HashSet<Integer> pressedKeys = new HashSet<Integer>();
+  public HashSet<Integer> pressedKeys = new HashSet<Integer>();
   
   public Keyer(Map m)
   {
     this.m = m;
-    //this.output = output;
-    new Timer(100, new ActionListener()
-    {
-      @Override
-      public void actionPerformed(ActionEvent a)
-      {
-        String keysString = "";
-        if(!pressedKeys.isEmpty())
-        {
-          Iterator<Integer> i = pressedKeys.iterator();
-          while(i.hasNext())
-          {
-            keysString += i.next() + ",";
-          }
-        }
-        //output.setText(keysString);
-      }
-    }).start();
   }
 
   @Override
@@ -41,7 +28,6 @@ public class Keyer implements KeyListener, ActionListener
     //Add key to hashSet when pressed
     int keyCode = e.getKeyCode();
     pressedKeys.add(keyCode);
-    System.out.println(pressedKeys);
     if(pressedKeys.contains(96))
     {
       m.p1.shoot();
@@ -60,6 +46,7 @@ public class Keyer implements KeyListener, ActionListener
   @Override
   public void keyTyped(KeyEvent e){}
   
+  //performs the actions when keys are pressed
   public void actionPerformed(ActionEvent a)
   {
     if(pressedKeys.contains(37))
